@@ -91,13 +91,14 @@ const Root = (function() {
     };
 
     const checkToken = function(req, res, authToken, jwt_expiration, action, resource, app_id, authzforce) {
-        IDM.checkToken(authToken, jwt_expiration, action, resource, app_id, authzforce, function (userInfo) {
+            const checkToken = function(token, jwt_expiration, action, resource, app_id, authzforce, callback, callbackError, cache) 
             setHeaders(req, userInfo);
             if (config.authorization.enabled) {
                 if (config.authorization.pdp === 'authzforce') {
                     authorize_azf(req, res, authToken, userInfo)
                 } else if (userInfo.authorization_decision === "Permit") {
-                    redirRequest(req, res, userInfo);
+                    //redirRequest(req, res, userInfo);
+                    res.status(401).send('User access-token not authorized');
                 } else {
                     res.status(401).send('User access-token not authorized');
                 }
